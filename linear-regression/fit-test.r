@@ -1,0 +1,15 @@
+queue <- read.csv('/home/zeio/ml-in-r/linear-regression/queue.csv', header=T, sep="\t")
+print("Mean of the column values from the read queue dataset:")
+colMeans(queue[,c("x", "y")])
+linear_regression_model <- lm(y ~ x, data=queue)
+print("Summary of the fitted linear regression model:")
+print(summary(linear_regression_model))
+candies=read.csv("/home/zeio/ml-in-r/linear-regression/candies.csv", header=T, sep=",")
+filtered_candies <- candies[candies$competitorname != "Haribo Twin Snakes" & candies$competitorname != "Hersheys Krackel",]
+multivariate_linear_regression_model = lm(winpercent ~ chocolate + fruity + caramel + peanutyalmondy + nougat + crispedricewafer + hard + bar + pluribus + sugarpercent + pricepercent, data=filtered_candies)
+test_existing_candies = candies[candies$competitorname == "Haribo Twin Snakes" | candies$competitorname == "Hersheys Krackel",]
+test_new_candies <- data.frame(chocolate=c(0), fruity=c(1), caramel=c(1), peanutyalmondy=c(1), nougat=c(0), crispedricewafer=c(0), hard=c(1), bar=c(0), pluribus=c(0), sugarpercent=c(0.32), pricepercent=c(0.219))
+test_candies = rbind(test_existing_candies[,c("chocolate", "fruity", "caramel", "peanutyalmondy", "nougat", "crispedricewafer", "hard", "bar", "pluribus", "sugarpercent", "pricepercent")], test_new_candies)
+predictions = predict(multivariate_linear_regression_model, newdata=test_candies)
+print("Predictions from the multivariate linear regression model: ")
+print(predictions)
